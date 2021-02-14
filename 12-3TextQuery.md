@@ -94,6 +94,11 @@ public:
 	QueryResult() = default;
 	QueryResult(string s, shared_ptr<set<int>> p, shared_ptr<vector<string>> f)
 		:sought(s), lines(p), file(f) {}
+    //应12.33题要求，添加两个迭代器和一个成员函数
+	set<int>::iterator begin() const {return lines->cbegin();}
+	set<int>::iterator end() const {return lines->cend();}
+	//返回智能指针的成员函数
+	shared_ptr<vector<string>> get_file() const { return file; }
 private:
 	string sought;//查询单词
 	shared_ptr<set<int>> lines;//出现的行号
