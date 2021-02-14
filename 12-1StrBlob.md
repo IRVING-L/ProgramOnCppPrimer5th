@@ -91,4 +91,4 @@ const string& StrBlob::back() const
 
 1. StrBlob类被定义出来，有什么功能，存在的意义？
    - StrBlob是一部分的、不完全的vector。自带了几种不同功能的成员函数：push_back()、pop_back()、size()、front()、back()
-   - 在我看来，StrBlob的存在是为了C++初学者能够更好的理解如何使用智能指针进行内存管理。其实分析一下StrBlob的源码不难发现，StrBlob类所谓的那些功能，都是借花献佛，调用vector的成员函数罢了。本质上还是一个vector，只不过是将vector放置在堆区，通过智能指针进行管理。这样做有一个好处，那就是在某个程序汇总，如果vector容器被多个对象共享的话，其实将vector换成StrBlob更安全，避免vector被意外销毁导致非法访问
+   - 在我看来，StrBlob的存在是为了C++初学者能够更好的理解如何使用智能指针进行内存管理。其实分析一下StrBlob的源码不难发现，StrBlob类所谓的那些功能，都是借花献佛，调用vector的成员函数罢了。本质上还是一个vector，只不过是将vector放置在堆区，通过智能指针进行管理。这样做有一个好处，那就是在某个程序中，如果vector容器被多个对象共享的话，其实将vector换成StrBlob更安全，避免vector被意外销毁导致非法访问
