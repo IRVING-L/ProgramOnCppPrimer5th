@@ -2,7 +2,6 @@
 
  *talk is cheap, show me the code*
 
-~~~cpp
 //头文件中的动态内存管理类StrVec
 class StrVec
 {
@@ -17,6 +16,9 @@ public:
 	~StrVec();
 	//成员函数
 	void push_back(const string&);
+	void reserve(const size_t n);
+	void resize(const size_t n);
+	void resize(const size_t n, string& t);
 	//下面四个成员函数单独一组，因为在头文件中就已经被定义了
 	size_t size() const { return first_free - elements; }
 	size_t capacity() const{ return cap - elements; }
@@ -31,14 +33,12 @@ private:
 	void free();//销毁元素并释放内存
 	void reallocate();//获得更多内存并拷贝已有元素
 	//私有成员变量
-	string* elements;  //指向内存空间中的首元素
-	string* first_free;//指向内存中最后一个元素的下一个位置
-	string* cap;       //指向内存空间的最后一个地址
+	string* elements;
+	string* first_free;
+	string* cap;
 };
-~~~
-
-~~~cpp
-//源文件中成员函数的定义
+  
+  //源文件中成员函数的定义
 #include "StrVec.h"
 //拷贝构造函数
 StrVec::StrVec(const StrVec& s)
@@ -68,6 +68,63 @@ void StrVec::push_back(const string& s)
 	alloc.construct(first_free++, s);
 }
 
+void StrVec::reserve(const size_t n)
+{
+    //分配至少能容纳n个元素的空间，如果n小于等于当前容量，那么reserve什么都不会做
+	if (capacity() < n)
+	{
+		auto data = alloc.allocate(n);
+		auto dest = data;
+		auto elem = elements;
+		for (size_t i = 0; i != size(); ++i)
+		{
+			alloc.construct(dest++, std::move(*elem++));
+		}
+		free();
+		elements = data;
+		first_free = dest;
+		cap = data + n;
+	}
+}
+
+void StrVec::resize(const size_t n)
+{
+	//调整容器的大小为n个元素。如果当前容器元素大于n，那多出来的元素将被丢弃
+	auto data = alloc.allocate(n);
+	auto dest = data;
+	auto elem = elements;
+	for (size_t i = 0; i < n; ++i)
+	{
+		if (i < size())
+		{
+			alloc.construct(dest++, std::move(*elem++));
+		}
+		else
+		{
+			alloc.construct(dest++);
+		}
+	}
+	free();
+	elements = data;
+	first_free = dest;
+	cap = data + n;
+}
+
+void StrVec::resize(const size_t n, const string& t)
+{
+	//调整容器的大小为n个元素，每个元素的值都为t
+	auto data = alloc.allocate(n);
+	auto dest = data;
+	auto elem = elements;
+	for (size_t i = 0; i < n; ++i)
+	{
+		alloc.construct(dest++, t);
+	}
+	free();
+	elements = data;
+	first_free = dest;
+	cap = data + n;
+}
 //私有成员函数
 void StrVec::chk_n_alloc()
 {
@@ -115,8 +172,6 @@ void StrVec::reallocate()
 	first_free = dest;
 	cap = newdata + newcapacity;
 }
-
-~~~
 
 让我们复盘一下这个程序设计：
 
