@@ -1,7 +1,8 @@
 ### 13.5 动态内存管理类StrVec
 
- *talk is cheap, show me the code*
-
+ *talk is cheap, show me the code*  
+ 
+~~~cpp
 //头文件中的动态内存管理类StrVec
 class StrVec
 {
@@ -37,7 +38,9 @@ private:
 	string* first_free;
 	string* cap;
 };
-  
+~~~  
+~~~cpp  
+
   //源文件中成员函数的定义
 #include "StrVec.h"
 //拷贝构造函数
@@ -172,6 +175,7 @@ void StrVec::reallocate()
 	first_free = dest;
 	cap = newdata + newcapacity;
 }
+~~~  
 
 让我们复盘一下这个程序设计：
 
