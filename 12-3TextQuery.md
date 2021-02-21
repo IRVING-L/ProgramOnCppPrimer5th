@@ -158,7 +158,7 @@ ostream& print(ostream& out, const QueryResult& q)
    >     int m_a,m_b,m_c,m_d;
    > };
    > //示例函数
-   > Package& test(int a,int b,int c,int d)
+   > Package test(int a,int b,int c,int d)
    > {
    >     //code...
    >     return Package(a,b,c,d);
