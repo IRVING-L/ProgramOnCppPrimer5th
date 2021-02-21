@@ -144,4 +144,24 @@ ostream& print(ostream& out, const QueryResult& q)
 
 3. string流处理string对象。
 4. static变量。值得注意的是，在TextQuery类的成员函数query中，定义了一个static变量。由于static变量的存储位置是全局区，全局区的数据存在于整个程序运行周期，因此在函数可以返回static对象或者变量。
+> ​		我有想到，Python中的函数，不是可以返回多个值吗```return a,b,c,d;```。这个操作C++是没有的。但是，通过这个程序中的QueryResult类，我发现，如果我要在一个程序中返回多个值，我可以把这些值打包成一个类，这样程序直接返回一个类就好了：
+   >
+   > 就比如我要我的程序返回a,b,c,d
+   >
+   > ~~~cpp
+   > class Package
+   > {
+   > public:
+   >     Package(){};
+   >     Package(int a, int b, int c, int d):m_a(a),m_b(b),m_c(c),m_d(d){}
+   > private:
+   >     int m_a,m_b,m_c,m_d;
+   > };
+   > //示例函数
+   > Package& test(int a,int b,int c,int d)
+   > {
+   >     //code...
+   >     return Package(a,b,c,d);
+   > }
+   > ~~~
 
